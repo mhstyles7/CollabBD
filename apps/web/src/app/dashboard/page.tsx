@@ -472,7 +472,7 @@ export default function DashboardPage() {
                 ) : conversations.map(conv => {
                   const otherUser = conv.participants.find((p: any) => p._id !== user._id) || conv.participants[0];
                   const isActive = activeConv?._id === conv._id;
-                  const unreadCount = conv.unreadCount?.[user._id] || 0;
+                  const unreadCount = conv.unreadCount?.[user._id as string] || 0;
                   return (
                     <div key={conv._id} onClick={() => openConversation(conv)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px', cursor: 'pointer', background: isActive ? 'rgba(99,102,241,0.08)' : 'transparent', borderBottom: '1px solid rgba(148,163,184,0.1)', transition: 'background 0.2s' }}>
                       <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#cbd5e1', flexShrink: 0, overflow: 'hidden' }}>

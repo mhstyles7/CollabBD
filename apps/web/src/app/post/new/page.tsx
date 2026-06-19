@@ -214,7 +214,7 @@ export default function PostNewPage() {
                           type="button"
                           onClick={() => set('category', cat.key)}
                           style={{
-                            padding: '12px 8px', borderRadius: 14, border: 'none', cursor: 'pointer',
+                            padding: '12px 8px', borderRadius: 14, cursor: 'pointer',
                             background: active ? `${cat.color}15` : 'rgba(248,250,252,0.8)',
                             border: active ? `2px solid ${cat.color}50` : '1.5px solid rgba(148,163,184,0.2)',
                             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,

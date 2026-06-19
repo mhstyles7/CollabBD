@@ -284,7 +284,7 @@ export default function FeedPage() {
                 onClick={() => setActiveCategory(cat.key)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 7,
-                  padding: '9px 18px', borderRadius: 999, border: 'none', cursor: 'pointer',
+                  padding: '9px 18px', borderRadius: 999, cursor: 'pointer',
                   background: active ? (cat.color || '#6366f1') : 'rgba(255,255,255,0.7)',
                   color: active ? '#fff' : '#475569',
                   fontSize: 14, fontWeight: 700,
