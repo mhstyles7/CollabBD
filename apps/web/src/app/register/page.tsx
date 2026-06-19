@@ -53,7 +53,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#f8f5ff', overflow: 'hidden', position: 'relative' }}>
+    <div className="auth-layout" style={{ background: '#f8f5ff', position: 'relative' }}>
 
       {/* ── Ambient Background Blobs ── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
@@ -63,16 +63,7 @@ export default function RegisterPage() {
       </div>
 
       {/* ══ LEFT PANEL ══ */}
-      <div style={{
-        flex: '0 0 48%',
-        background: 'linear-gradient(145deg, #1e0a3c 0%, #120827 40%, #0a0518 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '80px 64px',
-      }}>
+      <div className="auth-left-panel" style={{ background: 'linear-gradient(145deg, #1e0a3c 0%, #120827 40%, #0a0518 100%)' }}>
         {/* Left panel orbs */}
         <div className="orb-float-slow" style={{ position: 'absolute', top: '-10%', left: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 60%)', filter: 'blur(60px)' }} />
         <div className="orb-float-medium" style={{ position: 'absolute', bottom: '-5%', right: '-5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.25) 0%, transparent 60%)', filter: 'blur(60px)' }} />
@@ -86,11 +77,10 @@ export default function RegisterPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ marginBottom: 72 }}
+            style={{ marginBottom: 40 }}
           >
-            <Link href="/" className="logo-dark-wrap">
+            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center' }}>
               <img src="/logo_web.png" alt="CollabBD" className="logo-dark" />
-            </Link>
             </Link>
           </motion.div>
 
@@ -148,15 +138,7 @@ export default function RegisterPage() {
       </div>
 
       {/* ══ RIGHT PANEL ══ */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '60px 48px',
-        position: 'relative',
-        zIndex: 1,
-      }}>
+      <div className="auth-right-panel">
         <div style={{ width: '100%', maxWidth: 480 }}>
           <AnimatePresence mode="wait">
             {step === 1 && (
@@ -414,7 +396,7 @@ export default function RegisterPage() {
                       maxLength={6}
                       placeholder="000000"
                       style={{
-                        width: '100%', height: 72, textAlign: 'center',
+                        width: '100%', height: 100, textAlign: 'center',
                         fontSize: 36, fontWeight: 900, letterSpacing: '0.6em',
                         background: 'rgba(255,255,255,0.8)',
                         border: '2px solid rgba(16,185,129,0.3)',

@@ -26,6 +26,8 @@ import {
   MoreHorizontal,
   MessageCircle,
   Heart,
+  Menu,
+  LogIn
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuthStore } from '../store/authStore';
@@ -63,9 +65,16 @@ const categories = [
 
 export default function LandingPage() {
   const { user } = useAuthStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [siteStats, setSiteStats] = useState<any>(null);
   useEffect(() => {
     api.get('/stats/overview').catch(() => null).then(res => res && setSiteStats(res.data));
+    
+    // Force scroll to top on refresh
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, []);
 
   return (
@@ -120,7 +129,7 @@ export default function LandingPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            height: 76,
+            height: 90,
           }}
         >
           {/* Logo */}
@@ -128,26 +137,53 @@ export default function LandingPage() {
             <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
           </Link>
 
-          {/* Nav links */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
+          {/* Nav links Desktop */}
+          <nav className="nav-links-desktop">
             {user ? (
               <>
-                <Link href="/feed" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Browse Needs</Link>
-                <Link href="/rooms" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Community</Link>
-                <Link href="/map" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Map View</Link>
-                <Link href="/dashboard" className="btn-primary" style={{ height: 44, padding: '0 24px', fontSize: 14 }}>Dashboard</Link>
+                <Link href="/feed" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Search size={16} /> Browse Needs</Link>
+                <Link href="/rooms" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Users size={16} /> Community</Link>
+                <Link href="/map" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><MapPin size={16} /> Map View</Link>
+                <Link href="/dashboard" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 44, padding: '0 24px', fontSize: 14 }}>Dashboard</Link>
               </>
             ) : (
               <>
-                <Link href="/login" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Browse Needs</Link>
-                <Link href="/login" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Community</Link>
-                <Link href="/login" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Map View</Link>
-                <Link href="/login" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}>Log in</Link>
+                <Link href="/login" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Search size={16} /> Browse Needs</Link>
+                <Link href="/login" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Users size={16} /> Community</Link>
+                <Link href="/login" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><MapPin size={16} /> Map View</Link>
+                <Link href="/login" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><LogIn size={16} /> Log in</Link>
                 <Link href="/register" className="btn-primary" style={{ height: 44, padding: '0 24px', fontSize: 14 }}>Get Started</Link>
               </>
             )}
           </nav>
+          
+          {/* Mobile menu toggle */}
+          <button className="nav-mobile-menu" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#1e293b' }} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <Menu size={28} />
+          </button>
         </div>
+
+        {/* Mobile Dropdown */}
+        {mobileMenuOpen && (
+          <div style={{ position: 'absolute', top: 76, left: 0, right: 0, background: '#fff', padding: 20, boxShadow: '0 10px 30px rgba(0,0,0,0.1)', borderBottom: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 50 }}>
+             {user ? (
+              <>
+                <Link href="/feed" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Browse Needs</Link>
+                <Link href="/rooms" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Community</Link>
+                <Link href="/map" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Map View</Link>
+                <Link href="/dashboard" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Dashboard</Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Browse Needs</Link>
+                <Link href="/login" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Community</Link>
+                <Link href="/login" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Map View</Link>
+                <Link href="/login" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Log in</Link>
+                <Link href="/register" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Get Started</Link>
+              </>
+            )}
+          </div>
+        )}
       </header>
 
       {/* ════════════════════════════════════════════

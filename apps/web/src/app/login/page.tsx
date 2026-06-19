@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#f5f8ff', overflow: 'hidden', position: 'relative' }}>
+    <div className="auth-layout" style={{ background: '#f5f8ff', position: 'relative' }}>
 
       {/* ── Ambient Background Blobs ── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
@@ -49,16 +49,7 @@ export default function LoginPage() {
       </div>
 
       {/* ══ LEFT PANEL ══ */}
-      <div style={{
-        flex: '0 0 48%',
-        background: 'linear-gradient(145deg, #090e2b 0%, #0d1436 50%, #060a1e 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '80px 64px',
-      }}>
+      <div className="auth-left-panel" style={{ background: 'linear-gradient(145deg, #090e2b 0%, #0d1436 50%, #060a1e 100%)' }}>
         {/* Left panel ambient orbs */}
         <div className="orb-float-slow" style={{ position: 'absolute', top: '-10%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 60%)', filter: 'blur(60px)' }} />
         <div className="orb-float-medium" style={{ position: 'absolute', bottom: '-5%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 60%)', filter: 'blur(60px)' }} />
@@ -99,10 +90,10 @@ export default function LoginPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ marginBottom: 72 }}
+            style={{ marginBottom: 40 }}
           >
             <Link href="/" style={{ display: 'inline-flex', alignItems: 'center' }}>
-              <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
+              <img src="/logo_web.png" alt="CollabBD" className="logo-dark" />
             </Link>
           </motion.div>
 
@@ -168,16 +159,8 @@ export default function LoginPage() {
       </div>
 
       {/* ══ RIGHT PANEL ══ */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '60px 48px',
-        position: 'relative',
-        zIndex: 1,
-      }}>
-        <div style={{ width: '100%', maxWidth: 460 }}>
+      <div className="auth-right-panel">
+        <div style={{ width: '100%', maxWidth: 440 }}>
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -6,7 +6,7 @@ import {
   ShieldCheck, LayoutDashboard, Briefcase, MessageCircle, Bell,
   Settings, Star, TrendingUp, CheckCircle2, Clock, Users,
   Zap, ChevronRight, Eye, Plus, MapPin, LogOut, ArrowUpRight, FileText,
-  Send, Lock, User, X, Check, AlertCircle, Shield
+  Send, Lock, User, X, Check, AlertCircle, Shield, Menu
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -66,6 +66,7 @@ export default function DashboardPage() {
   const navItems = user?.role === 'admin' 
     ? [...BASE_NAV_ITEMS, { icon: Shield, label: 'Admin', href: '/dashboard/admin', active: false }] 
     : BASE_NAV_ITEMS;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   // Settings state
   const [settingsTab, setSettingsTab] = useState<'password'|'account'>('password');
@@ -193,21 +194,24 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f4ff', display: 'flex', position: 'relative', overflow: 'hidden' }}>
+    <div className="dashboard-layout" style={{ background: '#f0f4ff', position: 'relative', overflow: 'hidden' }}>
       {/* Ambient orbs */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         <div className="orb-float-slow" style={{ position: 'absolute', top: '-5%', right: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 65%)', filter: 'blur(80px)' }} />
         <div className="orb-float-medium" style={{ position: 'absolute', bottom: '0', left: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 65%)', filter: 'blur(80px)' }} />
       </div>
 
+      {/* ── HAMBURGER BUTTON (mobile only) ── */}
+      <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+        <Menu size={22} />
+      </button>
+
+      {/* ── OVERLAY (mobile only) ── */}
+      <div className={`sidebar-overlay${sidebarOpen ? ' open' : ''}`} onClick={() => setSidebarOpen(false)} />
+
       {/* ── SIDEBAR ── */}
-      <div style={{
-        width: 260, flexShrink: 0, height: '100vh', position: 'sticky', top: 0,
-        background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(99,102,241,0.1)', display: 'flex', flexDirection: 'column',
-        padding: '28px 16px', zIndex: 40,
-      }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36, padding: '0 8px' }}>
+      <div className={`dashboard-sidebar${sidebarOpen ? ' open' : ''}`}>
+        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36, padding: '0 8px' }} onClick={() => setSidebarOpen(false)}>
           <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
         </Link>
 
@@ -235,7 +239,7 @@ export default function DashboardPage() {
               <motion.button
                 key={item.label}
                 whileHover={{ x: 3 }}
-                onClick={() => setActiveNav(item.label)}
+                onClick={() => { setActiveNav(item.label); setSidebarOpen(false); }}
                 style={{
                   width: '100%', display: 'flex', alignItems: 'center', gap: 12,
                   padding: '12px 14px', borderRadius: 14, marginBottom: 4, border: 'none', cursor: 'pointer',
@@ -274,7 +278,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '36px 36px', position: 'relative', zIndex: 1 }}>
+      <div className="dashboard-content" style={{ position: 'relative', zIndex: 1 }}>
         {activeNav === 'Dashboard' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {/* Header */}

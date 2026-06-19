@@ -85,7 +85,7 @@ router.put('/me/password', protect, async (req: AuthRequest, res: Response): Pro
     }
     const user = await User.findById(req.user?.id);
     if (!user) { res.status(404).json({ message: 'User not found' }); return; }
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    const isMatch = await bcrypt.compare(oldPassword, user.password as string);
     if (!isMatch) { res.status(400).json({ message: 'Current password is incorrect' }); return; }
     user.password = await bcrypt.hash(newPassword, 12);
     await user.save();
