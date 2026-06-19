@@ -300,3 +300,72 @@ a {
 .stat-divider {
   border-right: 1px solid rgba(99, 102, 241, 0.12);
 }
+
+/* ═══════════════════════════════════════════
+   Logo Styling — Light & Dark Contexts
+═══════════════════════════════════════════ */
+
+/* Navbar / Light backgrounds */
+.logo-light {
+  height: auto;
+  width: auto;
+  max-height: 52px;
+  max-width: 200px;
+  object-fit: contain;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.logo-light:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
+/* Auth panels (dark backgrounds) — frosted glass container */
+.logo-dark-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.logo-dark-wrap:hover {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 40px rgba(139,92,246,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.logo-dark {
+  height: auto;
+  width: auto;
+  max-height: 56px;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Breakpoints
+═══════════════════════════════════════════ */
+
+/* Tablet (≤ 1024px) */
+@media (max-width: 1024px) {
+  .logo-light { max-height: 44px; max-width: 160px; }
+  .logo-dark  { max-height: 48px; max-width: 160px; }
+  .logo-dark-wrap { padding: 12px 22px; }
+}
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .logo-light { max-height: 38px; max-width: 130px; }
+  .logo-dark  { max-height: 40px; max-width: 140px; }
+  .logo-dark-wrap { padding: 10px 18px; border-radius: 16px; }
+}
+
+/* Small mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .logo-light { max-height: 32px; max-width: 110px; }
+  .logo-dark  { max-height: 34px; max-width: 120px; }
+  .logo-dark-wrap { padding: 8px 14px; border-radius: 14px; }
+}

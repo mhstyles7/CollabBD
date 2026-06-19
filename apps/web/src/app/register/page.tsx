@@ -88,19 +88,9 @@ export default function RegisterPage() {
             transition={{ duration: 0.6 }}
             style={{ marginBottom: 72 }}
           >
-            <Link href="/" style={{ display: 'inline-flex', alignItems: 'center' }}>
-              <img
-                src="/logo_web.png"
-                alt="CollabBD"
-                style={{
-                  height: 'auto',
-                  maxHeight: 120,
-                  width: 'auto',
-                  maxWidth: '280px',
-                  objectFit: 'contain',
-                  filter: 'brightness(0) invert(1) drop-shadow(0 0 20px rgba(139,92,246,0.6))',
-                }}
-              />
+            <Link href="/" className="logo-dark-wrap">
+              <img src="/logo_web.png" alt="CollabBD" className="logo-dark" />
+            </Link>
             </Link>
           </motion.div>
 

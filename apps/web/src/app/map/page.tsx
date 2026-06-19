@@ -114,7 +114,7 @@ export default function MapPage() {
       <header style={{ flexShrink: 0, zIndex: 50, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(99,102,241,0.1)', boxShadow: '0 2px 16px rgba(99,102,241,0.06)' }}>
         <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="/logo_web.png" alt="CollabBD" style={{ height: 'auto', maxHeight: 120, width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+            <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Link href="/feed" style={{ fontSize: 14, fontWeight: 600, color: '#475569' }}>Feed</Link>

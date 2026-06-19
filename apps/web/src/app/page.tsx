@@ -125,7 +125,7 @@ export default function LandingPage() {
         >
           {/* Logo */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <img src="/logo_web.png" alt="CollabBD" style={{ height: 'auto', maxHeight: 120, width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+            <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
           </Link>
 
           {/* Nav links */}
@@ -781,7 +781,7 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-                <img src="/logo_web.png" alt="CollabBD" style={{ height: 'auto', maxHeight: 120, width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+                <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
               </Link>
               <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.7, fontWeight: 500, maxWidth: 320, marginBottom: 24 }}>
                 Bangladesh's most trusted hyper-local talent network. Find verified students, freelancers & experts in your city.

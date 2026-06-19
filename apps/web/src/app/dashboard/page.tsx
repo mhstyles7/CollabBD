@@ -208,7 +208,7 @@ export default function DashboardPage() {
         padding: '28px 16px', zIndex: 40,
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36, padding: '0 8px' }}>
-          <img src="/logo_web.png" alt="CollabBD" style={{ height: 'auto', maxHeight: 120, width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
+          <img src="/logo_web.png" alt="CollabBD" className="logo-light" />
         </Link>
 
         {/* User mini-card */}
