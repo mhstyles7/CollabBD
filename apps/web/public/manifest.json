@@ -1,0 +1,16 @@
+{
+  "name": "CollabBD",
+  "short_name": "CollabBD",
+  "description": "Find verified talent right near you in Bangladesh.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
