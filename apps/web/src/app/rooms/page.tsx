@@ -131,7 +131,7 @@ function RoomCard({ room, index }: { room: any; index: number }) {
             onClick={joined ? () => router.push(`/rooms/${room.slug}`) : handleJoinLeave}
             disabled={isLoading && !joined}
             style={{
-              height: 36, padding: '0 18px', borderRadius: 12, border: 'none', cursor: isLoading && !joined ? 'not-allowed' : 'pointer',
+              height: 36, padding: '0 18px', borderRadius: 12, cursor: isLoading && !joined ? 'not-allowed' : 'pointer',
               background: joined ? 'rgba(99,102,241,0.1)' : `linear-gradient(135deg, ${room.coverColor}, ${room.coverColor}cc)`,
               color: joined ? '#6366f1' : '#fff',
               fontSize: 13, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -286,7 +286,7 @@ export default function RoomsPage() {
                 key={cat.key}
                 onClick={() => setActiveCategory(cat.key)}
                 style={{
-                  padding: '9px 20px', borderRadius: 999, border: 'none', cursor: 'pointer',
+                  padding: '9px 20px', borderRadius: 999, cursor: 'pointer',
                   background: active ? '#6366f1' : 'rgba(255,255,255,0.7)',
                   color: active ? '#fff' : '#475569',
                   fontSize: 14, fontWeight: 700, fontFamily: "'Plus Jakarta Sans', sans-serif",
