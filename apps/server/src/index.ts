@@ -26,49 +26,58 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
+// ── CORS origins: support comma-separated CLIENT_URL list ────────────
+const rawOrigins = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = rawOrigins.split(',').map((o) => o.trim());
+
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (Render health checks, Postman, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.some((allowed) => origin.startsWith(allowed))) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
 });
 
 // ── Security Middleware ──────────────────────────────────────────────
-// Set secure HTTP headers
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' },
-}));
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Pre-flight for all routes
 
-// CORS - strict origin whitelist
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
-
-// Sanitize data against NoSQL injection attacks (e.g. $gt, $where)
+// Sanitize data against NoSQL injection attacks
 app.use(mongoSanitize());
 
-// Body parser with size limit to prevent abuse
+// Body parser with size limit
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-// Global rate limiter — 100 requests per 15 minutes per IP
+// Global rate limiter — 200 requests per 15 minutes per IP
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Too many requests, please try again later.' },
 });
 app.use('/api/', globalLimiter);
 
-// Strict rate limiter on auth routes — 10 attempts per 15 minutes
+// Strict rate limiter on auth routes — 20 attempts per 15 minutes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Too many login attempts, please try again in 15 minutes.' },
@@ -91,9 +100,14 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Health check
+// Health check — also shows allowed origins for debugging
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', message: 'CollabBD API is running', timestamp: new Date() });
+  res.json({
+    status: 'ok',
+    message: 'CollabBD API is running',
+    timestamp: new Date(),
+    allowedOrigins,
+  });
 });
 
 // 404 handler for unknown routes
@@ -108,8 +122,12 @@ registerSocketHandlers(io);
 const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
   httpServer.listen(PORT, () => {
-    console.log(`[CollabBD] Server running on http://localhost:${PORT}`);
+    console.log(`[CollabBD] Server running on port ${PORT}`);
+    console.log(`[CollabBD] Allowed origins: ${allowedOrigins.join(', ')}`);
   });
+}).catch((err) => {
+  console.error('[CollabBD] Failed to connect to MongoDB:', err);
+  process.exit(1);
 });
 
 export { io };
