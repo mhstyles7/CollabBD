@@ -111,25 +111,21 @@ export default function LandingPage() {
       </div>
 
       {/* ════════════════════════════════════════════
-          NAVBAR (Glassmorphic)
+          NAVBAR (Premium Floating Glass Pill)
       ════════════════════════════════════════════ */}
-      <header
-        className="glass-nav"
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <div
+      <div style={{ position: 'sticky', top: 20, zIndex: 50, padding: '0 20px', transition: 'all 0.3s ease' }}>
+        <header
+          className="premium-glass-nav"
           style={{
-            maxWidth: 1200,
+            maxWidth: 1100,
             margin: '0 auto',
-            padding: '0 32px',
+            padding: '0 24px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            height: 90,
+            height: 76,
+            borderRadius: 24,
+            position: 'relative',
           }}
         >
           {/* Logo */}
@@ -158,14 +154,22 @@ export default function LandingPage() {
           </nav>
           
           {/* Mobile menu toggle */}
-          <button className="nav-mobile-menu" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#1e293b' }} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            <Menu size={28} />
+          <button className="nav-mobile-menu" style={{ background: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: 12, padding: 8, cursor: 'pointer', color: '#1e293b', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <Menu size={24} />
           </button>
-        </div>
+        </header>
 
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div style={{ position: 'absolute', top: 76, left: 0, right: 0, background: '#fff', padding: 20, boxShadow: '0 10px 30px rgba(0,0,0,0.1)', borderBottom: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: 16, zIndex: 50 }}>
+          <div style={{ 
+            position: 'absolute', top: 96, left: 20, right: 20, 
+            background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(24px)', 
+            padding: '24px', borderRadius: 24, 
+            boxShadow: '0 20px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1)', 
+            border: '1px solid rgba(255,255,255,0.8)', 
+            display: 'flex', flexDirection: 'column', gap: 16, zIndex: 49,
+            maxWidth: 1100, margin: '0 auto'
+          }}>
              {user ? (
               <>
                 <Link href="/feed" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Browse Needs</Link>
@@ -184,7 +188,7 @@ export default function LandingPage() {
             )}
           </div>
         )}
-      </header>
+      </div>
 
       {/* ════════════════════════════════════════════
           HERO SECTION
