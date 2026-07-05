@@ -313,10 +313,8 @@ export default function LandingPage() {
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           custom={0}
-          className="glass-card"
+          className="glass-card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
             borderRadius: 28,
             overflow: 'hidden',
           }}
@@ -403,11 +401,7 @@ export default function LandingPage() {
         </motion.div>
 
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 32,
-          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {[
             {
@@ -578,12 +572,7 @@ export default function LandingPage() {
           </motion.div>
 
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 48,
-              position: 'relative',
-            }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-12 relative"
           >
             {/* Connecting Line */}
             <div style={{ position: 'absolute', top: 60, left: '15%', right: '15%', height: 2, background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.2), transparent)', zIndex: 0 }} />
@@ -689,11 +678,7 @@ export default function LandingPage() {
         </motion.div>
 
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 20,
-          }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
         >
           {categories.map((c, i) => (
             <motion.div
