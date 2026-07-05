@@ -34,7 +34,11 @@ const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
     // Allow requests with no origin (Render health checks, Postman, etc.)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.some((allowed) => origin.startsWith(allowed))) {
+    if (allowedOrigins.some((allowed) => origin === allowed || origin.startsWith(allowed))) {
+      return callback(null, true);
+    }
+    // Allow Vercel preview URLs
+    if (origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
     callback(new Error(`CORS: origin ${origin} not allowed`));
@@ -46,7 +50,16 @@ const corsOptions = {
 
 const io = new SocketServer(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.some((allowed) => origin === allowed || origin.startsWith(allowed))) {
+        return callback(null, true);
+      }
+      if (origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
     methods: ['GET', 'POST'],
     credentials: true,
   },
