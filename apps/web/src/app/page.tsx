@@ -724,7 +724,7 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════
           CTA BANNER (Glassmorphic)
       ════════════════════════════════════════════ */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '40px 32px 160px', position: 'relative', zIndex: 2 }}>
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(40px, 8vw, 80px) 24px clamp(80px, 12vw, 160px)', position: 'relative', zIndex: 2 }}>
         <motion.div
           variants={scaleUp}
           initial="hidden"
@@ -734,9 +734,9 @@ export default function LandingPage() {
           className="glass-card"
           style={{
             position: 'relative',
-            borderRadius: 40,
+            borderRadius: 'clamp(24px, 5vw, 40px)',
             overflow: 'hidden',
-            padding: '100px 60px',
+            padding: 'clamp(40px, 8vw, 100px) clamp(24px, 5vw, 60px)',
             textAlign: 'center',
             background: 'rgba(255,255,255,0.7)',
             border: '2px solid rgba(255,255,255,0.9)',
@@ -812,7 +812,7 @@ export default function LandingPage() {
                 Bangladesh's most trusted hyper-local talent network. Find verified students, freelancers & experts in your city.
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
-                {['Made in Bangladesh', '4.9 Rated'].map(badge => (
+                {['Made in Bangladesh'].map(badge => (
                   <span key={badge} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 999, background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)', color: '#6366f1', fontSize: 12, fontWeight: 700 }}>
                     <ShieldCheck size={12} strokeWidth={2.5} />{badge}
                   </span>
