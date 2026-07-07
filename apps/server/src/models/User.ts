@@ -38,6 +38,10 @@ export interface IUser extends Document {
   isAvailableNow: boolean;
   portfolioLinks: string[];
   language: 'en' | 'bn';
+  title?: string;
+  hourlyRate?: number;
+  qualifications: Array<{ _id?: string; title: string; organization: string; year: string }>;
+  portfolio: Array<{ _id?: string; title: string; link: string }>;
   createdAt: Date;
   comparePassword(password: string): Promise<boolean>;
 }
@@ -80,6 +84,17 @@ const UserSchema = new Schema<IUser>(
     isAvailableNow: { type: Boolean, default: false },
     portfolioLinks: [{ type: String }],
     language: { type: String, enum: ['en', 'bn'], default: 'en' },
+    title: { type: String, default: '' },
+    hourlyRate: { type: Number, default: 0 },
+    qualifications: [{
+      title: { type: String, required: true },
+      organization: { type: String, required: true },
+      year: { type: String, required: true },
+    }],
+    portfolio: [{
+      title: { type: String, required: true },
+      link: { type: String, required: true },
+    }],
   },
   { timestamps: true }
 );

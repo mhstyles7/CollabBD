@@ -32,6 +32,11 @@ export default function ProfilePage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editHourlyRate, setEditHourlyRate] = useState('');
+  const [editSkills, setEditSkills] = useState('');
+  const [editQualifications, setEditQualifications] = useState<{title:string;organization:string;year:string}[]>([]);
+  const [editPortfolio, setEditPortfolio] = useState<{title:string;link:string}[]>([]);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -72,15 +77,19 @@ export default function ProfilePage() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // 1. Update basic info
-      await api.put('/users/me', { name: editName, bio: editBio });
-      // 2. Upload avatar if selected
+      const skillsArr = editSkills.split(',').map(s => s.trim()).filter(Boolean);
+      await api.put('/users/me', {
+        name: editName, bio: editBio, title: editTitle,
+        hourlyRate: parseFloat(editHourlyRate) || 0,
+        skills: skillsArr,
+        qualifications: editQualifications,
+        portfolio: editPortfolio,
+      });
       if (avatarFile) {
         const formData = new FormData();
         formData.append('avatar', avatarFile);
         await api.post('/users/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
       }
-      // Refresh profile
       const userRes = await api.get('/users/me');
       setUser((prev: any) => ({ ...prev, ...userRes.data }));
       updateUser(userRes.data);
@@ -210,6 +219,11 @@ export default function ProfilePage() {
                     onClick={() => {
                       setEditName(user.name);
                       setEditBio(user.bio || '');
+                      setEditTitle(user.title || '');
+                      setEditHourlyRate(user.hourlyRate?.toString() || '');
+                      setEditSkills((user.skills || []).join(', '));
+                      setEditQualifications(user.qualifications || []);
+                      setEditPortfolio(user.portfolio || []);
                       setAvatarFile(null);
                       setIsEditModalOpen(true);
                     }}
@@ -406,6 +420,57 @@ export default function ProfilePage() {
                 ))}
               </div>
             </motion.div>
+
+            {/* Qualifications */}
+            {(user.qualifications?.length > 0) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                style={{ background: 'rgba(255,255,255,0.68)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRadius: 24, border: '1.5px solid rgba(255,255,255,0.85)', boxShadow: '0 4px 20px rgba(99,102,241,0.06)', padding: '32px' }}
+              >
+                <h2 style={{ fontSize: 18, fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Award size={18} color="#6366f1" /> Qualifications
+                </h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  {user.qualifications.map((q: any, i: number) => (
+                    <div key={i} style={{ display: 'flex', gap: 16, padding: '16px 20px', borderRadius: 16, background: 'rgba(248,250,252,0.8)', border: '1px solid rgba(148,163,184,0.12)' }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Award size={18} color="#6366f1" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 15, fontWeight: 800, color: '#1e293b' }}>{q.title}</div>
+                        <div style={{ fontSize: 13, color: '#6366f1', fontWeight: 600 }}>{q.organization}</div>
+                        <div style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600, marginTop: 2 }}>{q.year}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Portfolio Works */}
+            {(user.portfolio?.length > 0) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.6 }}
+                style={{ background: 'rgba(255,255,255,0.68)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', borderRadius: 24, border: '1.5px solid rgba(255,255,255,0.85)', boxShadow: '0 4px 20px rgba(99,102,241,0.06)', padding: '32px' }}
+              >
+                <h2 style={{ fontSize: 18, fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Briefcase size={18} color="#ec4899" /> Portfolio
+                </h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {user.portfolio.map((p: any, i: number) => (
+                    <a key={i} href={p.link} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderRadius: 16, background: 'rgba(248,250,252,0.8)', border: '1px solid rgba(148,163,184,0.12)', textDecoration: 'none', transition: 'border-color 0.2s' }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)')}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(148,163,184,0.12)')}
+                    >
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{p.title}</div>
+                      <ArrowLeft size={14} color="#6366f1" style={{ transform: 'rotate(180deg)' }} />
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
@@ -413,25 +478,52 @@ export default function ProfilePage() {
       {/* Edit Profile Modal */}
       <AnimatePresence>
         {isEditModalOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-            <motion.div initial={{ y: 20, scale: 0.95 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.95 }} style={{ background: '#fff', borderRadius: 24, padding: 32, width: '100%', maxWidth: 460, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-              <h2 style={{ fontSize: 24, fontWeight: 800, color: '#0f172a', marginBottom: 24 }}>Edit Profile</h2>
-              <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, overflowY: 'auto' }}>
+            <motion.div initial={{ y: 20, scale: 0.95 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.95 }} style={{ background: '#fff', borderRadius: 24, padding: 32, width: '100%', maxWidth: 560, boxShadow: '0 20px 60px rgba(0,0,0,0.15)', maxHeight: '90vh', overflowY: 'auto' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 24 }}>Edit Profile</h2>
+              <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                {/* Basic */}
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Full Name</label><input type="text" value={editName} onChange={e => setEditName(e.target.value)} required style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Professional Title <span style={{ color: '#94a3b8', fontWeight: 500 }}>(e.g. Full-Stack Developer)</span></label><input type="text" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Your headline" style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Bio</label><textarea value={editBio} onChange={e => setEditBio(e.target.value)} rows={3} style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, resize: 'none', boxSizing: 'border-box' }} /></div>
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Skills <span style={{ color: '#94a3b8', fontWeight: 500 }}>(comma-separated)</span></label><input type="text" value={editSkills} onChange={e => setEditSkills(e.target.value)} placeholder="React, Node.js, Design" style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Hourly Rate (BDT)</label><input type="number" value={editHourlyRate} onChange={e => setEditHourlyRate(e.target.value)} placeholder="e.g. 500" style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
+                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Profile Picture</label><input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} style={{ width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 14 }} /></div>
+
+                {/* Qualifications */}
                 <div>
-                  <label style={{ display: 'block', fontSize: 14, fontWeight: 700, color: '#475569', marginBottom: 8 }}>Name</label>
-                  <input type="text" value={editName} onChange={e => setEditName(e.target.value)} required style={{ width: '100%', padding: '12px 16px', borderRadius: 12, border: '1px solid #cbd5e1', fontSize: 15 }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, color: '#475569' }}>Qualifications / Education</label>
+                    <button type="button" onClick={() => setEditQualifications(q => [...q, { title: '', organization: '', year: '' }])} style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, padding: '4px 12px', cursor: 'pointer' }}>+ Add</button>
+                  </div>
+                  {editQualifications.map((q, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 80px 32px', gap: 8, marginBottom: 8 }}>
+                      <input placeholder="Degree / Certificate" value={q.title} onChange={e => setEditQualifications(qs => qs.map((x, j) => j===i ? {...x, title: e.target.value} : x))} style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 13 }} />
+                      <input placeholder="Institution" value={q.organization} onChange={e => setEditQualifications(qs => qs.map((x, j) => j===i ? {...x, organization: e.target.value} : x))} style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 13 }} />
+                      <input placeholder="Year" value={q.year} onChange={e => setEditQualifications(qs => qs.map((x, j) => j===i ? {...x, year: e.target.value} : x))} style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 13 }} />
+                      <button type="button" onClick={() => setEditQualifications(qs => qs.filter((_, j) => j !== i))} style={{ background: '#fee2e2', border: 'none', borderRadius: 8, color: '#ef4444', fontWeight: 800, cursor: 'pointer', fontSize: 16 }}>×</button>
+                    </div>
+                  ))}
                 </div>
+
+                {/* Portfolio */}
                 <div>
-                  <label style={{ display: 'block', fontSize: 14, fontWeight: 700, color: '#475569', marginBottom: 8 }}>Bio</label>
-                  <textarea value={editBio} onChange={e => setEditBio(e.target.value)} rows={3} style={{ width: '100%', padding: '12px 16px', borderRadius: 12, border: '1px solid #cbd5e1', fontSize: 15, resize: 'none' }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, color: '#475569' }}>Portfolio Works</label>
+                    <button type="button" onClick={() => setEditPortfolio(p => [...p, { title: '', link: '' }])} style={{ fontSize: 12, fontWeight: 700, color: '#ec4899', background: 'rgba(236,72,153,0.08)', border: '1px solid rgba(236,72,153,0.2)', borderRadius: 8, padding: '4px 12px', cursor: 'pointer' }}>+ Add</button>
+                  </div>
+                  {editPortfolio.map((p, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 32px', gap: 8, marginBottom: 8 }}>
+                      <input placeholder="Project Title" value={p.title} onChange={e => setEditPortfolio(ps => ps.map((x, j) => j===i ? {...x, title: e.target.value} : x))} style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 13 }} />
+                      <input placeholder="https://..." value={p.link} onChange={e => setEditPortfolio(ps => ps.map((x, j) => j===i ? {...x, link: e.target.value} : x))} style={{ padding: '9px 12px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 13 }} />
+                      <button type="button" onClick={() => setEditPortfolio(ps => ps.filter((_, j) => j !== i))} style={{ background: '#fee2e2', border: 'none', borderRadius: 8, color: '#ef4444', fontWeight: 800, cursor: 'pointer', fontSize: 16 }}>×</button>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: 14, fontWeight: 700, color: '#475569', marginBottom: 8 }}>Profile Picture</label>
-                  <input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} style={{ width: '100%', padding: '10px', borderRadius: 12, border: '1px solid #cbd5e1', fontSize: 14 }} />
-                </div>
-                <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
+
+                <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
                   <button type="button" onClick={() => setIsEditModalOpen(false)} style={{ flex: 1, padding: '12px', borderRadius: 12, border: '1px solid #cbd5e1', background: '#fff', color: '#475569', fontWeight: 700, cursor: 'pointer' }}>Cancel</button>
-                  <button type="submit" disabled={isSubmitting} style={{ flex: 1, padding: '12px', borderRadius: 12, border: 'none', background: '#6366f1', color: '#fff', fontWeight: 700, cursor: 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
+                  <button type="submit" disabled={isSubmitting} style={{ flex: 1, padding: '12px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', fontWeight: 700, cursor: 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>

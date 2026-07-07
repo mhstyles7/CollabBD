@@ -30,7 +30,7 @@ router.get('/:id', async (req, res: Response): Promise<void> => {
 // Update profile
 router.put('/me', protect, async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const allowedFields = ['name', 'namebn', 'bio', 'biobn', 'skills', 'portfolioLinks', 'university', 'isAvailableNow', 'language', 'location'];
+    const allowedFields = ['name', 'namebn', 'bio', 'biobn', 'skills', 'portfolioLinks', 'university', 'isAvailableNow', 'language', 'location', 'title', 'hourlyRate', 'qualifications', 'portfolio'];
     const updates: Record<string, unknown> = {};
     allowedFields.forEach((field) => {
       if (req.body[field] !== undefined) updates[field] = req.body[field];
