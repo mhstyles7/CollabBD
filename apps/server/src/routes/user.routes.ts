@@ -59,7 +59,7 @@ router.patch('/me/availability', protect, async (req: AuthRequest, res: Response
 router.get('/', async (req, res: Response): Promise<void> => {
   try {
     const { skill, city, available, page = '1', limit = '12' } = req.query;
-    const filter: Record<string, unknown> = {};
+    const filter: Record<string, unknown> = { accountType: 'worker' };
     if (skill) filter.skills = { $in: [skill] };
     if (city) filter['location.city'] = { $regex: city, $options: 'i' };
     if (available === 'true') filter.isAvailableNow = true;
