@@ -79,6 +79,14 @@ export default function DashboardPage() {
       router.push('/login');
       return;
     }
+    
+    // Check for tab query param to auto-switch tabs (e.g. from profile message button)
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab && navItems.some(i => i.label === tab)) {
+      setActiveNav(tab);
+    }
+    
     const fetchData = async () => {
       try {
         const [postsRes, appsRes, notifsRes, convsRes] = await Promise.allSettled([
@@ -266,6 +274,23 @@ export default function DashboardPage() {
               </motion.button>
             );
           })}
+          
+          {/* External Profile Link */}
+          <motion.button
+            whileHover={{ x: 3 }}
+            onClick={() => router.push('/profile')}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+              padding: '12px 14px', borderRadius: 14, marginBottom: 4, border: 'none', cursor: 'pointer',
+              background: 'transparent',
+              color: '#64748b',
+              fontSize: 15, fontWeight: 600,
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              borderLeft: '3px solid transparent',
+            }}
+          >
+            <User size={18} /> My Profile (Public)
+          </motion.button>
         </nav>
 
         {/* Logout */}

@@ -140,6 +140,7 @@ export default function LandingPage() {
                 <Link href="/feed" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Search size={16} /> Browse Needs</Link>
                 <Link href="/rooms" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><Users size={16} /> Community</Link>
                 <Link href="/map" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><MapPin size={16} /> Map View</Link>
+                <Link href="/profile" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={(e) => (e.currentTarget.style.color = '#6366f1')} onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}><User size={16} /> My Profile</Link>
                 <Link href="/dashboard" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 44, padding: '0 24px', fontSize: 14 }}>Dashboard</Link>
               </>
             ) : (
@@ -253,8 +254,8 @@ export default function LandingPage() {
               textShadow: '0 4px 24px rgba(255,255,255,0.5)',
             }}
           >
-            Bangladesh&apos;s{' '}
-            <span className="gradient-text">Talent Network.</span>
+            Find Verified Talent{' '}
+            <span className="gradient-text">Right Near You.</span>
           </motion.h1>
 
           {/* Subtext */}
