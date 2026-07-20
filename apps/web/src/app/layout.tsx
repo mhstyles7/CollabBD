@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CollabBD — Find Verified Talent Near You | বাংলাদেশের প্রতিভা খুঁজুন',
+  title: "CollabBD — Bangladesh's Talent Network | বাংলাদেশের প্রতিভা খুঁজুন",
   description: 'Bangladesh\'s premier platform to find verified nearby talent. Connect with students, freelancers & experts for design, development, tutoring, and more. | বাংলাদেশের সেরা লোকাল ট্যালেন্ট ডিসকভারি প্ল্যাটফর্ম',
   keywords: ['freelance Bangladesh', 'BD talent', 'local skills', 'verified freelancers', 'Dhaka jobs', 'student freelancer', 'CollabBD', 'বাংলাদেশ ফ্রিল্যান্সার'],
   authors: [{ name: 'CollabBD Team' }],

@@ -232,7 +232,7 @@ export default function LandingPage() {
               backdropFilter: 'blur(10px)',
             }}
           >
-            <Zap size={16} className="text-amber-500" fill="currentColor" /> Launching in Bangladesh
+            <Zap size={16} className="text-amber-500" fill="currentColor" /> Bangladesh's Talent Network
           </motion.div>
 
           {/* Heading */}
@@ -253,8 +253,8 @@ export default function LandingPage() {
               textShadow: '0 4px 24px rgba(255,255,255,0.5)',
             }}
           >
-            Find Verified Talent{' '}
-            <span className="gradient-text">Right Near You.</span>
+            Bangladesh&apos;s{' '}
+            <span className="gradient-text">Talent Network.</span>
           </motion.h1>
 
           {/* Subtext */}

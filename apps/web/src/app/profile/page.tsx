@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldCheck, MapPin, Star, Briefcase, Clock, Users, Globe,
   Code2, Palette, PenTool, CheckCircle2, Edit2, MessageCircle,
-  ArrowLeft, Award, TrendingUp, Eye, Loader2, Zap
+  ArrowLeft, Award, TrendingUp, Eye, Loader2, Zap, Camera
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -488,7 +488,18 @@ export default function ProfilePage() {
                 <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Bio</label><textarea value={editBio} onChange={e => setEditBio(e.target.value)} rows={3} style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, resize: 'none', boxSizing: 'border-box' }} /></div>
                 <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Skills <span style={{ color: '#94a3b8', fontWeight: 500 }}>(comma-separated)</span></label><input type="text" value={editSkills} onChange={e => setEditSkills(e.target.value)} placeholder="React, Node.js, Design" style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
                 <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Hourly Rate (BDT)</label><input type="number" value={editHourlyRate} onChange={e => setEditHourlyRate(e.target.value)} placeholder="e.g. 500" style={{ width: '100%', padding: '11px 14px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 15, boxSizing: 'border-box' }} /></div>
-                <div><label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Profile Picture</label><input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} style={{ width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: 14 }} /></div>
+                {/* Profile Picture */}
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#475569', marginBottom: 6 }}>Profile Picture</label>
+                  <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: 120, border: '2px dashed #cbd5e1', borderRadius: 16, background: '#f8fafc', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.borderColor = '#6366f1'} onMouseLeave={e => e.currentTarget.style.borderColor = '#cbd5e1'}>
+                    <input type="file" accept="image/*" onChange={e => setAvatarFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#e0e7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                      <Camera size={20} color="#6366f1" />
+                    </div>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#475569' }}>{avatarFile ? avatarFile.name : 'Click to upload picture'}</span>
+                    {!avatarFile && <span style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>JPG, PNG, WEBP (Max 5MB)</span>}
+                  </label>
+                </div>
 
                 {/* Qualifications */}
                 <div>

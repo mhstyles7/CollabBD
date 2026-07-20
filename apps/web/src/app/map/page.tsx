@@ -320,7 +320,7 @@ export default function MapPage() {
                 </div>
               )}
               <div style={{ display: 'flex', gap: 10 }}>
-                <Link href={`/profile`} style={{ flex: 1, height: 42, borderRadius: 12, background: `linear-gradient(135deg, ${selected.color}, ${selected.color}cc)`, color: '#fff', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: `0 4px 12px ${selected.color}35` }}>
+                <Link href={`/profile/${selected.id}`} style={{ flex: 1, height: 42, borderRadius: 12, background: `linear-gradient(135deg, ${selected.color}, ${selected.color}cc)`, color: '#fff', fontSize: 14, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: `0 4px 12px ${selected.color}35` }}>
                   View Profile <ChevronRight size={16} />
                 </Link>
                 <button style={{ height: 42, padding: '0 18px', borderRadius: 12, border: `1.5px solid ${selected.color}30`, cursor: 'pointer', background: `${selected.color}10`, color: selected.color, fontSize: 14, fontWeight: 700 }}>
