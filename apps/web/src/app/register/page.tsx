@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '../../lib/api';
@@ -17,6 +17,8 @@ export default function RegisterPage() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [resendSuccess, setResendSuccess] = useState('');
   const router = useRouter();
 
   const [stats, setStats] = useState<any>(null);
@@ -41,6 +43,7 @@ export default function RegisterPage() {
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setResendSuccess('');
     setIsLoading(true);
     try {
       await api.post('/auth/verify-email', { email, otp });
@@ -49,6 +52,25 @@ export default function RegisterPage() {
       setError(err.response?.data?.message || 'Invalid or expired OTP');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0) return;
+    setError('');
+    setResendSuccess('');
+    try {
+      await api.post('/auth/resend-otp', { email });
+      setResendSuccess('A new OTP has been sent to your email!');
+      setResendCooldown(60);
+      const interval = setInterval(() => {
+        setResendCooldown((prev) => {
+          if (prev <= 1) { clearInterval(interval); return 0; }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to resend OTP');
     }
   };
 
@@ -430,13 +452,36 @@ export default function RegisterPage() {
                       {isLoading ? <Loader2 size={22} className="animate-spin" /> : 'Verify & Finish'}
                     </motion.button>
 
-                    <button type="button" onClick={() => { setStep(1); setOtp(''); setError(''); }}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, color: '#94a3b8', transition: 'color 0.2s' }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = '#64748b')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
-                    >
-                      ← Back to registration
-                    </button>
+                    {resendSuccess && (
+                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                        style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 14, padding: '12px 18px', color: '#059669', fontSize: 14, fontWeight: 600 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <CheckCircle2 size={16} strokeWidth={2.5} /> {resendSuccess}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+                      <button type="button" onClick={handleResendOtp}
+                        disabled={resendCooldown > 0}
+                        style={{
+                          background: 'none', border: 'none', cursor: resendCooldown > 0 ? 'not-allowed' : 'pointer',
+                          fontSize: 14, fontWeight: 700, color: resendCooldown > 0 ? '#cbd5e1' : '#8b5cf6',
+                          transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: 6,
+                        }}
+                      >
+                        <RefreshCw size={14} strokeWidth={2.5} />
+                        {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
+                      </button>
+
+                      <button type="button" onClick={() => { setStep(1); setOtp(''); setError(''); setResendSuccess(''); }}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, color: '#94a3b8', transition: 'color 0.2s' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = '#64748b')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
+                      >
+                        ← Back to registration
+                      </button>
+                    </div>
                   </form>
                 </div>
               </motion.div>

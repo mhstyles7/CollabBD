@@ -19,6 +19,7 @@ import messageRoutes from './routes/message.routes';
 import notificationRoutes from './routes/notification.routes';
 import adminRoutes from './routes/admin.routes';
 import { registerSocketHandlers } from './socket/socket.handler';
+import { validateEmailConfig } from './utils/mailer';
 import path from 'path';
 
 dotenv.config();
@@ -134,6 +135,7 @@ registerSocketHandlers(io);
 // Connect DB and start server
 const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
+  validateEmailConfig();
   httpServer.listen(PORT, () => {
     console.log(`[CollabBD] Server running on port ${PORT}`);
     console.log(`[CollabBD] Allowed origins: ${allowedOrigins.join(', ')}`);
