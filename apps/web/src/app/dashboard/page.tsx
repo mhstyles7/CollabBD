@@ -46,7 +46,7 @@ const CAT_COLORS: Record<string, string> = {
 };
 
 export default function DashboardPage() {
-  const { user, logout } = useAuthStore();
+  const { user, logout, isLoading: authLoading } = useAuthStore();
   const router = useRouter();
   const [activeNav, setActiveNav] = useState('Dashboard');
   const [myPosts, setMyPosts] = useState<any[]>([]);
@@ -75,6 +75,7 @@ export default function DashboardPage() {
   const [settingsMsg, setSettingsMsg] = useState('');
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
       router.push('/login');
       return;

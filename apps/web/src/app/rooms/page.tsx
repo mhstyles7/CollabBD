@@ -149,7 +149,7 @@ function RoomCard({ room, index }: { room: any; index: number }) {
 }
 
 export default function RoomsPage() {
-  const { user } = useAuthStore();
+  const { user, isLoading: authLoading } = useAuthStore();
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -157,6 +157,7 @@ export default function RoomsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) { router.push('/login'); return; }
     const fetchRooms = async () => {
       try {
@@ -169,7 +170,7 @@ export default function RoomsPage() {
       }
     };
     fetchRooms();
-  }, [user, router]);
+  }, [user, router, authLoading]);
 
   const filtered = rooms.filter(r => {
     if (activeCategory !== 'all' && r.category !== activeCategory) return false;

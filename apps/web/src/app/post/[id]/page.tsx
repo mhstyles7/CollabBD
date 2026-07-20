@@ -41,7 +41,10 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const [applySuccess, setApplySuccess] = useState('');
 
   useEffect(() => {
-    if (!user) { router.push('/login'); return; }
+    if (!user) {
+      if (typeof window !== 'undefined' && !useAuthStore.getState().isLoading) { router.push('/login'); }
+      return;
+    }
     const fetchPost = async () => {
       try {
         const res = await api.get(`/posts/${params.id}`);

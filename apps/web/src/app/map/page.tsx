@@ -30,7 +30,7 @@ const CITY_COORDS: Record<string, [number, number]> = {
 let MapContainer: any, TileLayer: any, Marker: any, Popup: any, Circle: any;
 
 export default function MapPage() {
-  const { user: authUser } = useAuthStore();
+  const { user: authUser, isLoading: authLoading } = useAuthStore();
   const router = useRouter();
   const [mapLoaded, setMapLoaded] = useState(false);
   const [selected, setSelected] = useState<any>(null);
@@ -41,6 +41,7 @@ export default function MapPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!authUser) { router.push('/login'); return; }
     const fetchTalent = async () => {
       try {
@@ -62,7 +63,7 @@ export default function MapPage() {
       }
     };
     fetchTalent();
-  }, [authUser, router, showAvailableOnly]);
+  }, [authUser, router, showAvailableOnly, authLoading]);
 
   const filtered = talent.filter(t => {
     if (search && !t.name?.toLowerCase().includes(search.toLowerCase()) &&

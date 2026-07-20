@@ -23,7 +23,7 @@ const BADGES: Record<string, { label: string; color: string; bg: string; icon: R
 const SKILL_COLORS = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ef4444', '#f97316'];
 
 export default function ProfilePage() {
-  const { user: authUser, updateUser } = useAuthStore();
+  const { user: authUser, updateUser, isLoading: authLoading } = useAuthStore();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +45,7 @@ export default function ProfilePage() {
   const [studentIdFile, setStudentIdFile] = useState<File | null>(null);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!authUser) {
       router.push('/login');
       return;

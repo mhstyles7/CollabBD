@@ -178,7 +178,7 @@ function PostCard({ post, index }: { post: Post; index: number }) {
 }
 
 export default function FeedPage() {
-  const { user } = useAuthStore();
+  const { user, isLoading: authLoading } = useAuthStore();
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -189,8 +189,8 @@ export default function FeedPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) { router.push('/login'); }
-  }, [user, router]);
+    if (!authLoading && !user) { router.push('/login'); }
+  }, [user, router, authLoading]);
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
     setError(null);

@@ -47,7 +47,7 @@ export default function PostNewPage() {
   const [error, setError] = useState<string | null>(null);
 
   // Simple auth guard
-  if (typeof window !== 'undefined' && !user) {
+  if (typeof window !== 'undefined' && !useAuthStore.getState().isLoading && !user) {
     router.push('/login');
     return null;
   }
