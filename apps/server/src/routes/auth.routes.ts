@@ -30,23 +30,17 @@ router.post('/register', async (req, res: Response): Promise<void> => {
       res.status(400).json({ message: 'Email already registered' });
       return;
     }
-    const otp = generateOTP();
     const user = await User.create({
       name,
       email,
       password,
       phone,
       accountType: accountType || 'client',
-      otp,
-      otpExpiry: new Date(Date.now() + 10 * 60 * 1000),
+      isEmailVerified: true,
     });
-    // Best-effort OTP email — don't fail registration if mailer is misconfigured
-    try { await sendOTPEmail(email, otp, name); } catch (mailErr) {
-      console.warn('OTP email failed (non-fatal):', mailErr);
-    }
     const token = generateToken(String(user._id), user.role);
     res.status(201).json({
-      message: 'Registered successfully. Check email for OTP.',
+      message: 'Registered successfully.',
       token,
       user: {
         id: user._id,

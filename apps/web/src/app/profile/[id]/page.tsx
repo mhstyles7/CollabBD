@@ -125,9 +125,14 @@ export default function PublicProfilePage() {
 
                 {/* CTA Buttons */}
                 {authUser ? (
-                  <Link href={`/messages?user=${id}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, height: 44, borderRadius: 14, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', fontSize: 14, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.25)', textDecoration: 'none' }}>
+                  <button onClick={async () => {
+                    try {
+                      await api.post('/messages/conversations', { recipientId: id });
+                      router.push('/dashboard');
+                    } catch { alert('Failed to start conversation'); }
+                  }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', height: 44, borderRadius: 14, border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', fontSize: 14, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.25)' }}>
                     <MessageCircle size={16} /> Message
-                  </Link>
+                  </button>
                 ) : (
                   <Link href="/login" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, height: 44, borderRadius: 14, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', color: '#fff', fontSize: 14, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif", boxShadow: '0 4px 14px rgba(99,102,241,0.25)', textDecoration: 'none' }}>
                     Login to Contact

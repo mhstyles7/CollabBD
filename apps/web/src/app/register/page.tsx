@@ -2,23 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe, RefreshCw } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '../../lib/api';
 
 export default function RegisterPage() {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2>(1);
   const [accountType, setAccountType] = useState<'client' | 'worker'>('client');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [resendCooldown, setResendCooldown] = useState(0);
-  const [resendSuccess, setResendSuccess] = useState('');
   const router = useRouter();
 
   const [stats, setStats] = useState<any>(null);
@@ -32,45 +29,11 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       await api.post('/auth/register', { name, email, password, accountType });
-      setStep(3);
+      router.push('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to register. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setResendSuccess('');
-    setIsLoading(true);
-    try {
-      await api.post('/auth/verify-email', { email, otp });
-      router.push('/login');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Invalid or expired OTP');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleResendOtp = async () => {
-    if (resendCooldown > 0) return;
-    setError('');
-    setResendSuccess('');
-    try {
-      await api.post('/auth/resend-otp', { email });
-      setResendSuccess('A new OTP has been sent to your email!');
-      setResendCooldown(60);
-      const interval = setInterval(() => {
-        setResendCooldown((prev) => {
-          if (prev <= 1) { clearInterval(interval); return 0; }
-          return prev - 1;
-        });
-      }, 1000);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to resend OTP');
     }
   };
 
@@ -368,124 +331,7 @@ export default function RegisterPage() {
               </motion.div>
             )}
 
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 30, scale: 0.97 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -30, scale: 0.97 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div style={{
-                  background: 'rgba(255,255,255,0.62)',
-                  backdropFilter: 'blur(32px)',
-                  WebkitBackdropFilter: 'blur(32px)',
-                  borderRadius: 32,
-                  border: '1.5px solid rgba(255,255,255,0.85)',
-                  boxShadow: '0 24px 64px rgba(16,185,129,0.1), 0 4px 16px rgba(0,0,0,0.06)',
-                  padding: '52px 48px',
-                  textAlign: 'center',
-                }}>
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                    style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px', boxShadow: '0 8px 24px rgba(16,185,129,0.2)' }}>
-                    <CheckCircle2 size={40} color="#059669" strokeWidth={2.5} />
-                  </motion.div>
 
-                  <p style={{ fontSize: 13, fontWeight: 700, color: '#059669', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 10 }}>Step 2 of 2</p>
-                  <h2 style={{ fontSize: 32, fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: '-0.03em', marginBottom: 12 }}>
-                    Verify your email
-                  </h2>
-                  <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.6, fontWeight: 500, marginBottom: 36 }}>
-                    We&apos;ve sent a 6-digit code to<br />
-                    <strong style={{ color: '#0f172a', fontWeight: 700 }}>{email}</strong>
-                  </p>
-
-                  {error && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                      style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 14, padding: '14px 18px', marginBottom: 24, color: '#ef4444', fontSize: 14, fontWeight: 600 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <AlertCircle size={16} strokeWidth={2.5} /> {error}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    <input
-                      type="text"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
-                      required
-                      maxLength={6}
-                      placeholder="000000"
-                      style={{
-                        width: '100%', height: 100, textAlign: 'center',
-                        fontSize: 36, fontWeight: 900, letterSpacing: '0.6em',
-                        background: 'rgba(255,255,255,0.8)',
-                        border: '2px solid rgba(16,185,129,0.3)',
-                        borderRadius: 18, color: '#0f172a',
-                        outline: 'none', transition: 'all 0.2s', boxSizing: 'border-box',
-                        fontFamily: "'Plus Jakarta Sans', sans-serif",
-                      }}
-                      onFocus={(e) => { e.target.style.borderColor = '#059669'; e.target.style.boxShadow = '0 0 0 4px rgba(16,185,129,0.12)'; }}
-                      onBlur={(e) => { e.target.style.borderColor = 'rgba(16,185,129,0.3)'; e.target.style.boxShadow = 'none'; }}
-                    />
-
-                    <motion.button
-                      type="submit"
-                      disabled={isLoading || otp.length !== 6}
-                      whileHover={{ scale: otp.length === 6 ? 1.02 : 1 }}
-                      whileTap={{ scale: 0.98 }}
-                      style={{
-                        height: 58, borderRadius: 16, border: 'none',
-                        cursor: isLoading || otp.length !== 6 ? 'not-allowed' : 'pointer',
-                        background: otp.length === 6
-                          ? 'linear-gradient(135deg, #059669 0%, #10b981 100%)'
-                          : 'rgba(148,163,184,0.3)',
-                        color: otp.length === 6 ? '#fff' : '#94a3b8',
-                        fontSize: 16, fontWeight: 800,
-                        fontFamily: "'Plus Jakarta Sans', sans-serif",
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                        boxShadow: otp.length === 6 ? '0 8px 24px rgba(16,185,129,0.3)' : 'none',
-                        transition: 'all 0.3s',
-                      }}
-                    >
-                      {isLoading ? <Loader2 size={22} className="animate-spin" /> : 'Verify & Finish'}
-                    </motion.button>
-
-                    {resendSuccess && (
-                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-                        style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 14, padding: '12px 18px', color: '#059669', fontSize: 14, fontWeight: 600 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <CheckCircle2 size={16} strokeWidth={2.5} /> {resendSuccess}
-                        </div>
-                      </motion.div>
-                    )}
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
-                      <button type="button" onClick={handleResendOtp}
-                        disabled={resendCooldown > 0}
-                        style={{
-                          background: 'none', border: 'none', cursor: resendCooldown > 0 ? 'not-allowed' : 'pointer',
-                          fontSize: 14, fontWeight: 700, color: resendCooldown > 0 ? '#cbd5e1' : '#8b5cf6',
-                          transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: 6,
-                        }}
-                      >
-                        <RefreshCw size={14} strokeWidth={2.5} />
-                        {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
-                      </button>
-
-                      <button type="button" onClick={() => { setStep(1); setOtp(''); setError(''); setResendSuccess(''); }}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 700, color: '#94a3b8', transition: 'color 0.2s' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#64748b')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
-                      >
-                        ← Back to registration
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </motion.div>
-            )}
           </AnimatePresence>
         </div>
       </div>
