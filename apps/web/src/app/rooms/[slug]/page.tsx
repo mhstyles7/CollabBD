@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../store/authStore';
 import api from '../../../lib/api';
+import { avatarUrl } from '../../../lib/avatar';
 import { io, Socket } from 'socket.io-client';
 
 export default function RoomChatPage() {
@@ -72,8 +73,8 @@ export default function RoomChatPage() {
     if (!newMessage.trim() || !socket || !room) return;
     
     const msgData = {
-      roomId: room._id,
-      text: newMessage.trim(),
+      slug: slug,
+      content: newMessage.trim(),
     };
     socket.emit('send_message', msgData);
     setNewMessage('');
@@ -129,8 +130,8 @@ export default function RoomChatPage() {
                 }}
               >
                 {!isMe && (
-                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 800 }}>
-                    {msg.sender?.name?.[0] || 'U'}
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 14, fontWeight: 800, overflow: 'hidden' }}>
+                    {msg.sender?.avatar ? <img src={avatarUrl(msg.sender.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (msg.sender?.name?.[0] || 'U')}
                   </div>
                 )}
                 <div>
@@ -147,7 +148,7 @@ export default function RoomChatPage() {
                     boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                     border: isMe ? 'none' : '1px solid rgba(148,163,184,0.1)',
                   }}>
-                    {msg.text}
+                    {msg.content}
                   </div>
                 </div>
               </motion.div>

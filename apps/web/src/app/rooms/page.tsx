@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/api';
+import { avatarUrl } from '../../lib/avatar';
 import { useEffect } from 'react';
 
 const CATEGORIES = [
@@ -201,7 +202,9 @@ export default function RoomsPage() {
             <Link href="/rooms" style={{ fontSize: 15, fontWeight: 700, color: '#6366f1' }}>Community</Link>
             {user ? (
               <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '10px 24px', borderRadius: 12, boxShadow: '0 4px 12px rgba(99,102,241,0.25)' }}>
-                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', color: '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900 }}>{user.name[0]}</div>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', color: '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, overflow: 'hidden' }}>
+                  {user.avatar ? <img src={avatarUrl(user.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name[0]}
+                </div>
                 Dashboard
               </Link>
             ) : (
