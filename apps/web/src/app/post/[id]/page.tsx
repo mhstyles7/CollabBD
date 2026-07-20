@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../store/authStore';
 import api from '../../../lib/api';
+import { avatarUrl } from '../../../lib/avatar';
 
 const CAT_COLOR: Record<string, string> = {
   development: '#6366f1', design: '#ec4899', writing: '#8b5cf6',
@@ -222,7 +223,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
               <h3 style={{ fontSize: 14, fontWeight: 800, color: '#475569', marginBottom: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>POSTED BY</h3>
               <div style={{ display: 'flex', gap: 14, marginBottom: 16 }}>
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: 22, flexShrink: 0 }}>
-                  {post.postedBy?.avatar ? <img src={post.postedBy.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} alt="avatar" /> : post.postedBy?.name?.[0]}
+                  {post.postedBy?.avatar ? <img src={avatarUrl(post.postedBy.avatar)!} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} alt="avatar" /> : post.postedBy?.name?.[0]}
                 </div>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{post.postedBy?.name}</div>

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/api';
+import { avatarUrl } from '../../lib/avatar';
 import { useEffect, useState } from 'react';
 
 
@@ -185,7 +186,7 @@ export default function ProfilePage() {
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                     overflow: 'hidden'
                   }}>
-                    {user.avatar ? <img src={user.avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name?.[0]}
+                    {user.avatar ? <img src={avatarUrl(user.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name?.[0]}
                   </div>
                   {user.isAvailableNow && (
                     <div style={{ position: 'absolute', bottom: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: '#10b981', border: '3px solid rgba(255,255,255,0.9)', boxShadow: '0 0 0 3px rgba(16,185,129,0.2)' }} />

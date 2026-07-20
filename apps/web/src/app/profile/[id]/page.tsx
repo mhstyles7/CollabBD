@@ -9,6 +9,7 @@ import {
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import api from '../../../lib/api';
+import { avatarUrl } from '../../../lib/avatar';
 import { useAuthStore } from '../../../store/authStore';
 
 const SKILL_COLORS = ['#6366f1','#ec4899','#f59e0b','#10b981','#06b6d4','#8b5cf6','#ef4444','#f97316'];
@@ -94,7 +95,7 @@ export default function PublicProfilePage() {
               <div style={{ padding: '0 28px 28px' }}>
                 <div style={{ position: 'relative', display: 'inline-block', marginTop: -40, marginBottom: 16 }}>
                   <div style={{ width: 88, height: 88, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, fontWeight: 900, color: '#fff', border: '4px solid rgba(255,255,255,0.9)', boxShadow: '0 8px 24px rgba(99,102,241,0.3)', fontFamily: "'Plus Jakarta Sans', sans-serif", overflow: 'hidden' }}>
-                    {user.avatar ? <img src={user.avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name?.[0]}
+                    {user.avatar ? <img src={avatarUrl(user.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name?.[0]}
                   </div>
                   {user.isAvailableNow && <div style={{ position: 'absolute', bottom: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: '#10b981', border: '3px solid rgba(255,255,255,0.9)', boxShadow: '0 0 0 3px rgba(16,185,129,0.2)' }} />}
                 </div>

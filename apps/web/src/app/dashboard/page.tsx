@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/api';
+import { avatarUrl } from '../../lib/avatar';
 import { io, Socket } from 'socket.io-client';
 
 function timeAgo(dateStr: string) {
@@ -502,7 +503,7 @@ export default function DashboardPage() {
                   return (
                     <div key={conv._id} onClick={() => openConversation(conv)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px', cursor: 'pointer', background: isActive ? 'rgba(99,102,241,0.08)' : 'transparent', borderBottom: '1px solid rgba(148,163,184,0.1)', transition: 'background 0.2s' }}>
                       <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#cbd5e1', flexShrink: 0, overflow: 'hidden' }}>
-                        {otherUser?.avatar ? <img src={otherUser.avatar} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="avatar" /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #6366f1, #ec4899)', color: '#fff', fontWeight: 800 }}>{otherUser?.name?.[0]}</div>}
+                        {otherUser?.avatar ? <img src={avatarUrl(otherUser.avatar)!} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="avatar" /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #6366f1, #ec4899)', color: '#fff', fontWeight: 800 }}>{otherUser?.name?.[0]}</div>}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>

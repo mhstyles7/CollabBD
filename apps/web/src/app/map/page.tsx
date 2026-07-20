@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/api';
+import { avatarUrl } from '../../lib/avatar';
 
 const SKILL_COLORS = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6'];
 
@@ -202,7 +203,7 @@ export default function MapPage() {
                 <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <div style={{ position: 'relative', flexShrink: 0 }}>
                     <div style={{ width: 48, height: 48, borderRadius: '50%', background: `linear-gradient(135deg, ${t.color}, ${t.color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900, color: '#fff', fontFamily: "'Plus Jakarta Sans', sans-serif", overflow: 'hidden' }}>
-                      {t.avatar ? <img src={t.avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : t.name?.[0]}
+                      {t.avatar ? <img src={avatarUrl(t.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : t.name?.[0]}
                     </div>
                     {t.isAvailableNow && <div style={{ position: 'absolute', bottom: 1, right: 1, width: 13, height: 13, borderRadius: '50%', background: '#10b981', border: '2px solid #fff' }} />}
                   </div>
@@ -298,7 +299,7 @@ export default function MapPage() {
               </button>
               <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 16 }}>
                 <div style={{ width: 56, height: 56, borderRadius: '50%', background: `linear-gradient(135deg, ${selected.color}, ${selected.color}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, fontWeight: 900, color: '#fff', position: 'relative', overflow: 'hidden' }}>
-                  {selected.avatar ? <img src={selected.avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : selected.name?.[0]}
+                  {selected.avatar ? <img src={avatarUrl(selected.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : selected.name?.[0]}
                   {selected.isAvailableNow && <div style={{ position: 'absolute', bottom: 2, right: 2, width: 14, height: 14, borderRadius: '50%', background: '#10b981', border: '2px solid #fff' }} />}
                 </div>
                 <div>
