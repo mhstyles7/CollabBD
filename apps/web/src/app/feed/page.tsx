@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '../../lib/api';
 import { useAuthStore } from '../../store/authStore';
+import { avatarUrl } from '../../lib/avatar';
 
 const CATEGORIES = [
   { key: 'all', label: 'All', Icon: Globe },
@@ -238,7 +239,16 @@ export default function FeedPage() {
           <nav style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <Link href="/feed" style={{ fontSize: 15, fontWeight: 700, color: '#6366f1', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Browse</Link>
             <Link href="/rooms" style={{ fontSize: 15, fontWeight: 600, color: '#475569', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#6366f1'} onMouseLeave={e => e.currentTarget.style.color = '#475569'}>Community</Link>
-            <Link href="/login" style={{ fontSize: 14, fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '10px 24px', borderRadius: 12, boxShadow: '0 4px 12px rgba(99,102,241,0.25)' }}>Sign In</Link>
+            {user ? (
+              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '10px 24px', borderRadius: 12, boxShadow: '0 4px 12px rgba(99,102,241,0.25)' }}>
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fff', color: '#6366f1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, overflow: 'hidden' }}>
+                  {user.avatar ? <img src={avatarUrl(user.avatar)!} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name?.[0]}
+                </div>
+                Dashboard
+              </Link>
+            ) : (
+              <Link href="/login" style={{ fontSize: 14, fontWeight: 700, color: '#fff', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '10px 24px', borderRadius: 12, boxShadow: '0 4px 12px rgba(99,102,241,0.25)' }}>Sign In</Link>
+            )}
           </nav>
         </div>
       </header>
