@@ -27,7 +27,8 @@ import {
   MessageCircle,
   Heart,
   Menu,
-  LogIn
+  LogIn,
+  User
 } from 'lucide-react';
 import Link from 'next/link';
 import { useAuthStore } from '../store/authStore';
@@ -176,6 +177,7 @@ export default function LandingPage() {
                 <Link href="/feed" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Browse Needs</Link>
                 <Link href="/rooms" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Community</Link>
                 <Link href="/map" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>Map View</Link>
+                <Link href="/profile" style={{ fontSize: 16, fontWeight: 600, color: '#1e293b' }}>My Profile</Link>
                 <Link href="/dashboard" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Dashboard</Link>
               </>
             ) : (
