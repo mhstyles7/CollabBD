@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2, Eye, EyeOff, Zap, AlertCircle, MapPin, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '../../lib/api';
